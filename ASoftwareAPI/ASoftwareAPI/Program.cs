@@ -1,3 +1,6 @@
+using ASoftwareVersaoFisioterapiaAPI.Context;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +9,12 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+string mySqlConnection = builder.Configuration.GetConnectionString("ASoftwareVFisioConnection");
+
+// Registrando o serviço a partir da string de conexão
+builder.Services.AddDbContext<ASoftwareVersaoFisioterapiaAPIContext>(option =>
+option.UseMySql(mySqlConnection, ServerVersion.AutoDetect(mySqlConnection)));
 
 var app = builder.Build();
 

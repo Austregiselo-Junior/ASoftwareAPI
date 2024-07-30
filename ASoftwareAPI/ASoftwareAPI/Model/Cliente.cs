@@ -1,4 +1,4 @@
-﻿namespace ASoftwareAPI.Model
+﻿namespace ASoftwareVersaoFisioterapiaAPI.Model
 {
     public class Cliente
     {
