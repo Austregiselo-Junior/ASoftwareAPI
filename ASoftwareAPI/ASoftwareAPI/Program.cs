@@ -1,5 +1,6 @@
 using ASoftwareVersaoFisioterapiaAPI.Context;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +11,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-string mySqlConnection = builder.Configuration.GetConnectionString("ASoftwareVFisioConnection");
+string mySqlConnection = builder.Configuration.GetConnectionString("DefaultConnection");
 
 // Registrando o serviço a partir da string de conexão
 builder.Services.AddDbContext<ASoftwareVersaoFisioterapiaAPIContext>(option =>
