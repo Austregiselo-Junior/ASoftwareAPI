@@ -12,12 +12,9 @@ namespace ASoftwareVersaoFisioterapiaAPI.Model
         public string Nome { get; set; }
 
         [Required]
-        [RegularExpression(@"^\d+$", ErrorMessage = "Somente números inteiros são permitidos.")]
-        public string Telefone { get; set; }
-
-        [Required]
+        [RegularExpression(@"^\d+$", ErrorMessage = "Somente números são permitidos.")]
         [Range(0, int.MaxValue, ErrorMessage = "O valor deve ser um número inteiro positivo.")]
-        public int QuantidadeDeSessao { get; set; }
+        public string Telefone { get; set; }
 
         [Required]
         public DateTime DataDaConsulta { get; set; }
@@ -28,10 +25,8 @@ namespace ASoftwareVersaoFisioterapiaAPI.Model
         [Required]
         public DateTime UltimaAtualizacao { get; set; }
 
-        [Required]
         public Usuario Usuario { get; set; }
 
-        [Required]
         public Categoria Categoria { get; set; }
 
         public int UsuarioId { get; set; }

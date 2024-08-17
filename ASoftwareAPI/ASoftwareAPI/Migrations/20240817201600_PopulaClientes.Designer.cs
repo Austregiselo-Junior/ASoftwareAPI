@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ASoftwareVersaoFisioterapiaAPI.Migrations
 {
     [DbContext(typeof(ASoftwareVersaoFisioterapiaAPIContext))]
-    [Migration("20240814003645_AjustandoTabelacomValidacao")]
-    partial class AjustandoTabelacomValidacao
+    [Migration("20240817201600_PopulaClientes")]
+    partial class PopulaClientes
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -42,9 +42,8 @@ namespace ASoftwareVersaoFisioterapiaAPI.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
-                    b.Property<float?>("Parcelas")
-                        .IsRequired()
-                        .HasColumnType("float");
+                    b.Property<int>("QuantidadeDeSessao")
+                        .HasColumnType("int");
 
                     b.Property<string>("SituacaoFinanceira")
                         .IsRequired()
@@ -58,7 +57,7 @@ namespace ASoftwareVersaoFisioterapiaAPI.Migrations
                         .IsRequired()
                         .HasColumnType("float");
 
-                    b.Property<float?>("ValorDasParcelas")
+                    b.Property<float?>("ValorPago")
                         .IsRequired()
                         .HasColumnType("float");
 
@@ -66,8 +65,9 @@ namespace ASoftwareVersaoFisioterapiaAPI.Migrations
                         .IsRequired()
                         .HasColumnType("float");
 
-                    b.Property<DateTime>("Vencimento")
-                        .HasColumnType("datetime(6)");
+                    b.Property<string>("Vencimento")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.HasKey("CategoriaId");
 
@@ -95,9 +95,6 @@ namespace ASoftwareVersaoFisioterapiaAPI.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
-
-                    b.Property<int>("QuantidadeDeSessao")
-                        .HasColumnType("int");
 
                     b.Property<string>("Telefone")
                         .IsRequired()

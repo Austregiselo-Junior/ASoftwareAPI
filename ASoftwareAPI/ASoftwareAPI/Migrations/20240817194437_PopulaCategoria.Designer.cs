@@ -4,6 +4,7 @@ using ASoftwareVersaoFisioterapiaAPI.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ASoftwareVersaoFisioterapiaAPI.Migrations
 {
     [DbContext(typeof(ASoftwareVersaoFisioterapiaAPIContext))]
-    partial class ASoftwareVersaoFisioterapiaAPIContextModelSnapshot : ModelSnapshot
+    [Migration("20240817194437_PopulaCategoria")]
+    partial class PopulaCategoria
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

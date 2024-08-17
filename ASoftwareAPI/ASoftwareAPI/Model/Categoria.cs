@@ -15,6 +15,11 @@ namespace ASoftwareVersaoFisioterapiaAPI.Model
         public float? ValorDaSessao { get; set; }
 
         [Required]
+        [RegularExpression(@"^\d+$", ErrorMessage = "Somente números inteiros são permitidos.")]
+        [Range(0, int.MaxValue, ErrorMessage = "O valor deve ser um número inteiro positivo.")]
+        public int QuantidadeDeSessao { get; set; }
+
+        [Required]
         [Range(0.0, float.MaxValue, ErrorMessage = "O valor deve ser positivo.")]
         public float? ValorTotal { get; set; }
 
@@ -24,14 +29,12 @@ namespace ASoftwareVersaoFisioterapiaAPI.Model
 
         [Required]
         [Range(0.0, float.MaxValue, ErrorMessage = "O valor deve ser positivo.")]
-        public float? Parcelas { get; set; }
+        public float? ValorPago { get; set; }
 
         [Required]
-        [Range(0.0, float.MaxValue, ErrorMessage = "O valor deve ser positivo.")]
-        public float? ValorDasParcelas { get; set; }
-
-        [Required]
-        public DateTime Vencimento { get; set; }
+        [RegularExpression(@"^\d+$", ErrorMessage = "Somente números inteiros são permitidos.")]
+        [Range(1, 31, ErrorMessage = "Adicione o dia do vencimento")]
+        public string Vencimento { get; set; }
 
         [Required]
         [StringLength(80, ErrorMessage = "Nome grande, tente um menor")]

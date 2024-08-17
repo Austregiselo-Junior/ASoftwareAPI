@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ASoftwareVersaoFisioterapiaAPI.Migrations
 {
     [DbContext(typeof(ASoftwareVersaoFisioterapiaAPIContext))]
-    [Migration("20240813005605_MigracaoInicial")]
-    partial class MigracaoInicial
+    [Migration("20240817194345_PopulaUsuario")]
+    partial class PopulaUsuario
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,33 +34,40 @@ namespace ASoftwareVersaoFisioterapiaAPI.Migrations
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("CategoriaId"));
 
                     b.Property<float?>("Desconto")
+                        .IsRequired()
                         .HasColumnType("float");
 
-                    b.Property<float?>("Parcelas")
-                        .HasColumnType("float");
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<int>("QuantidadeDeSessao")
+                        .HasColumnType("int");
 
                     b.Property<string>("SituacaoFinanceira")
                         .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Tipo")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(80)
+                        .HasColumnType("varchar(80)");
 
                     b.Property<DateTime>("UltimaAtualizacao")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int?>("ValorDaSessao")
-                        .HasColumnType("int");
+                    b.Property<float?>("ValorDaSessao")
+                        .IsRequired()
+                        .HasColumnType("float");
 
-                    b.Property<float?>("ValorDasParcelas")
+                    b.Property<float?>("ValorPago")
+                        .IsRequired()
                         .HasColumnType("float");
 
                     b.Property<float?>("ValorTotal")
+                        .IsRequired()
                         .HasColumnType("float");
 
-                    b.Property<int?>("Vencimento")
-                        .HasColumnType("int");
+                    b.Property<string>("Vencimento")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.HasKey("CategoriaId");
 
@@ -86,10 +93,8 @@ namespace ASoftwareVersaoFisioterapiaAPI.Migrations
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("QuantidadeDeSessao")
-                        .HasColumnType("int");
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("Telefone")
                         .IsRequired()
@@ -124,11 +129,13 @@ namespace ASoftwareVersaoFisioterapiaAPI.Migrations
 
                     b.Property<string>("Login")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("Senha")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(12)
+                        .HasColumnType("varchar(12)");
 
                     b.Property<DateTime>("UltimaAtualizacao")
                         .HasColumnType("datetime(6)");
