@@ -43,6 +43,6 @@ namespace ASoftwareVersaoFisioterapiaAPI.Model
         [Required]
         public DateTime UltimaAtualizacao { get; set; }
 
-        public Cliente Cliente { get; set; }
+        public Cliente? Cliente { get; set; }
     }
 }
