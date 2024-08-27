@@ -21,14 +21,14 @@ namespace ASoftwareVersaoFisioterapiaAPI.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<Cliente>> Get()
         {
-            var cliente = _context.Clientes.ToList();
+            var cliente = _context.Clientes.AsNoTracking().ToList();
             return (cliente is null) ? NotFound("Cliente não encontrado.") : cliente;
         }
 
         [HttpGet("Categorias")]
         public ActionResult<IEnumerable<Cliente>> GetClientesAndCategorias()
         {
-            var clientesECategorias = _context.Clientes.Include(clientes => clientes.Categoria).ToList();
+            var clientesECategorias = _context.Clientes.AsNoTracking().Include(clientes => clientes.Categoria).ToList();
             var options = new JsonSerializerOptions { ReferenceHandler = ReferenceHandler.Preserve, WriteIndented = true };
             var json = JsonSerializer.Serialize(clientesECategorias, options);
             return Content(json); ;
@@ -37,7 +37,7 @@ namespace ASoftwareVersaoFisioterapiaAPI.Controllers
         [HttpGet("{id:int}", Name = "ObterCliente")]
         public ActionResult<Cliente> GetById(int id)
         {
-            var cliente = _context.Clientes.FirstOrDefault(c => c.ClienteId == id);
+            var cliente = _context.Clientes.AsNoTracking().FirstOrDefault(c => c.ClienteId == id);
             return (cliente is null) ? NotFound("Cliente não encontrado.") : cliente;
         }
 

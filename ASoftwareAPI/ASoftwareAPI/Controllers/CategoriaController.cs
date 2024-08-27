@@ -1,6 +1,7 @@
 ﻿using ASoftwareVersaoFisioterapiaAPI.Context;
 using ASoftwareVersaoFisioterapiaAPI.Model;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ASoftwareVersaoFisioterapiaAPI.Controllers
 {
@@ -18,14 +19,14 @@ namespace ASoftwareVersaoFisioterapiaAPI.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<Categoria>> Get()
         {
-            var categoria = _context.Categorias.ToList();
+            var categoria = _context.Categorias.AsNoTracking().ToList();
             return (categoria is null) ? NotFound("Categoria não encontrada.") : categoria;
         }
 
         [HttpGet("{id:int}", Name = "ObterCategoria")]
         public ActionResult<Categoria> GetById(int id)
         {
-            var categoria = _context.Categorias.FirstOrDefault(c => c.CategoriaId == id);
+            var categoria = _context.Categorias.AsNoTracking().FirstOrDefault(c => c.CategoriaId == id);
             return (categoria is null) ? NotFound("Categoria não encontrada.") : categoria;
         }
 
