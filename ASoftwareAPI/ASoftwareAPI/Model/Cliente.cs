@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ASoftwareVersaoFisioterapiaAPI.Model
 {
@@ -13,7 +12,6 @@ namespace ASoftwareVersaoFisioterapiaAPI.Model
 
         [Required]
         [RegularExpression(@"^\d+$", ErrorMessage = "Somente números são permitidos.")]
-        [Range(0, int.MaxValue, ErrorMessage = "O valor deve ser um número inteiro positivo.")]
         public string Telefone { get; set; }
 
         [Required]
@@ -23,14 +21,13 @@ namespace ASoftwareVersaoFisioterapiaAPI.Model
         public DateTime DataDoCadastro { get; set; }
 
         [Required]
-        public DateTime UltimaAtualizacao { get; set; }
+        public DateTime? UltimaAtualizacao { get; set; }
 
-        public Usuario Usuario { get; set; }
+        public int? UsuarioId { get; set; }
+        public Usuario? Usuario { get; set; }
 
-        public Categoria Categoria { get; set; }
-
-        public int UsuarioId { get; set; }
-        public int CategoriaId { get; set; }
+        public int? CategoriaId { get; set; }
+        public Categoria? Categoria { get; set; }
 
         public Cliente()
         {

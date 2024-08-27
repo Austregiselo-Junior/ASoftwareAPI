@@ -19,9 +19,9 @@ namespace ASoftwareVersaoFisioterapiaAPI.Model
         public DateTime DataDoCadastro { get; set; }
 
         [Required]
-        public DateTime UltimaAtualizacao { get; set; }
+        public DateTime? UltimaAtualizacao { get; set; }
 
-        public ICollection<Cliente> Clientes { get; set; }
+        public ICollection<Cliente>? Clientes { get; set; }
 
         public Usuario()
         {

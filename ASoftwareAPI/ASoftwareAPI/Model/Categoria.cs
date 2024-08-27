@@ -12,7 +12,7 @@ namespace ASoftwareVersaoFisioterapiaAPI.Model
 
         [Required]
         [Range(0.0, float.MaxValue, ErrorMessage = "O valor deve ser positivo.")]
-        public float? ValorDaSessao { get; set; }
+        public float ValorDaSessao { get; set; }
 
         [Required]
         [RegularExpression(@"^\d+$", ErrorMessage = "Somente números inteiros são permitidos.")]
@@ -41,8 +41,8 @@ namespace ASoftwareVersaoFisioterapiaAPI.Model
         public string SituacaoFinanceira { get; set; }
 
         [Required]
-        public DateTime UltimaAtualizacao { get; set; }
+        public DateTime? UltimaAtualizacao { get; set; }
 
-        public Cliente? Cliente { get; set; }
+        public ICollection<Cliente>? Clientes { get; set; }
     }
 }

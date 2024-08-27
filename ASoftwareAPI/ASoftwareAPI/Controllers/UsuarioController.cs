@@ -1,6 +1,9 @@
 ﻿using ASoftwareVersaoFisioterapiaAPI.Context;
 using ASoftwareVersaoFisioterapiaAPI.Model;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace ASoftwareVersaoFisioterapiaAPI.Controllers
 {
@@ -20,6 +23,16 @@ namespace ASoftwareVersaoFisioterapiaAPI.Controllers
         {
             var usuario = _context.Usuarios.ToList();
             return (usuario is null) ? NotFound("Usuario não encontrados.") : usuario;
+        }
+
+        [HttpGet("Clientes")]
+        public ActionResult<IEnumerable<Usuario>> GetClientesAndUsuario()
+        {
+            var usuarioseClientes = _context.Usuarios.Include(usuarios => usuarios.Clientes).ToList();
+            var options = new JsonSerializerOptions { ReferenceHandler = ReferenceHandler.Preserve, WriteIndented = true };
+
+            var json = JsonSerializer.Serialize(usuarioseClientes, options);
+            return Content(json);
         }
 
         [HttpGet("{id:int}", Name = "ObterUsuario")]
