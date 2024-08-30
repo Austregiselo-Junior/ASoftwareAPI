@@ -1,5 +1,6 @@
 ﻿using ASoftwareVersaoFisioterapiaAPI.Context;
 using ASoftwareVersaoFisioterapiaAPI.Model;
+using ASoftwareVersaoFisioterapiaAPI.Services.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,9 +12,11 @@ namespace ASoftwareVersaoFisioterapiaAPI.Controllers
     {
         private readonly ASoftwareVersaoFisioterapiaAPIContext _context;
 
-        public CategoriaController(ASoftwareVersaoFisioterapiaAPIContext context)
+
+        public CategoriaController(ASoftwareVersaoFisioterapiaAPIContext context, IAuthService authService)
         {
             _context = context;
+
         }
 
         [HttpGet]

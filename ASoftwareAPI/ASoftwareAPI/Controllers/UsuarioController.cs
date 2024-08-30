@@ -1,5 +1,6 @@
 ﻿using ASoftwareVersaoFisioterapiaAPI.Context;
 using ASoftwareVersaoFisioterapiaAPI.Model;
+using ASoftwareVersaoFisioterapiaAPI.Services.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
@@ -12,10 +13,12 @@ namespace ASoftwareVersaoFisioterapiaAPI.Controllers
     public class UsuarioController : ControllerBase
     {
         private readonly ASoftwareVersaoFisioterapiaAPIContext _context;
+        private readonly IAuthService _authService;
 
-        public UsuarioController(ASoftwareVersaoFisioterapiaAPIContext context)
+        public UsuarioController(ASoftwareVersaoFisioterapiaAPIContext context, IAuthService authService)
         {
             _context = context;
+            _authService = authService;
         }
 
         [HttpGet]
@@ -52,6 +55,19 @@ namespace ASoftwareVersaoFisioterapiaAPI.Controllers
             _context.SaveChanges();
 
             return new CreatedAtRouteResult("ObterUsuario", new { id = usuario.UsuarioId }, usuario);
+        }
+
+        [HttpPost("login")]
+        public IActionResult Login(string login, string senha)
+        {
+            if ((bool)(_authService?.ValidateUserAsync(login, senha)))
+            {
+                return Ok("Login realizado com sucesso.");
+            }
+            else
+            {
+                return Unauthorized("Credenciais inválidas.");
+            }
         }
 
         [HttpPut("{id:int}")]
