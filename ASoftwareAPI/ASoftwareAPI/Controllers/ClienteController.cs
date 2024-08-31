@@ -1,5 +1,6 @@
 ﻿using ASoftwareVersaoFisioterapiaAPI.Context;
 using ASoftwareVersaoFisioterapiaAPI.Model;
+using ASoftwareVersaoFisioterapiaAPI.Services.TimeControl;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
@@ -12,11 +13,15 @@ namespace ASoftwareVersaoFisioterapiaAPI.Controllers
     public class ClienteController : ControllerBase
     {
         private readonly ASoftwareVersaoFisioterapiaAPIContext _context;
+        private readonly ITimeControlService _timeControlService;
 
-        public ClienteController(ASoftwareVersaoFisioterapiaAPIContext context)
+        public ClienteController(ASoftwareVersaoFisioterapiaAPIContext context, ITimeControlService timeControlService)
         {
             _context = context;
+            _timeControlService = timeControlService;
         }
+
+        #region Gets
 
         [HttpGet]
         public ActionResult<IEnumerable<Cliente>> Get()
@@ -31,7 +36,7 @@ namespace ASoftwareVersaoFisioterapiaAPI.Controllers
             var clientesECategorias = _context.Clientes.AsNoTracking().Include(clientes => clientes.Categoria).ToList();
             var options = new JsonSerializerOptions { ReferenceHandler = ReferenceHandler.Preserve, WriteIndented = true };
             var json = JsonSerializer.Serialize(clientesECategorias, options);
-            return Content(json); ;
+            return Content(json);
         }
 
         [HttpGet("{id:int}", Name = "ObterCliente")]
@@ -41,7 +46,9 @@ namespace ASoftwareVersaoFisioterapiaAPI.Controllers
             return (cliente is null) ? NotFound("Cliente não encontrado.") : cliente;
         }
 
-        [HttpPost]
+        #endregion Gets
+
+        [HttpPost("AdicionarCliente")]
         public ActionResult Post(Cliente cliente)
         {
             try
@@ -49,8 +56,15 @@ namespace ASoftwareVersaoFisioterapiaAPI.Controllers
                 if (cliente == null)
                     return BadRequest();
 
-                _context.Clientes.Add(cliente);
-                _context.SaveChanges();
+                if (_timeControlService.ValidateTimeControl(cliente.DataDaConsulta))
+                {
+                    _context.Clientes.Add(cliente);
+                    _context.SaveChanges();
+                }
+                else
+                {
+                    return BadRequest("Error message: Horário não disponível!");
+                }
 
                 return new CreatedAtRouteResult("ObterCliente", new { id = cliente.ClienteId }, cliente);
             }
@@ -61,22 +75,24 @@ namespace ASoftwareVersaoFisioterapiaAPI.Controllers
             }
         }
 
-        [HttpPut("{id:int}")]
-        public ActionResult Put(int id, Cliente cliente)
+        [HttpPut("AtualizarCliente")]
+        public ActionResult Put(string nome, Cliente cliente)
         {
             try
             {
-                if (id != cliente?.ClienteId)
-                    return BadRequest("Id inválido");
+                var hasclienteFromDB = _context?.Clientes.FirstOrDefault(c => c.Nome == nome);
 
-                var clienteFromDB = _context?.Clientes.FirstOrDefault(c => c.ClienteId == id);
-
-                if (clienteFromDB == null)
+                if (hasclienteFromDB == null)
                     return BadRequest("Cliente não encontrado");
 
-                _context.Entry(clienteFromDB).State = EntityState.Detached;
+                if (!_timeControlService.ValidateTimeControl(cliente.DataDaConsulta))
+                {
+                    return BadRequest("Error message: Horário não disponível!");
+                }
+
+                _context.Entry(hasclienteFromDB).State = EntityState.Detached;
                 _context.Entry(cliente).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-                _context.SaveChanges();
+                _context.SaveChangesAsync();
                 return Ok(cliente);
             }
             catch (Exception ex)
@@ -85,10 +101,10 @@ namespace ASoftwareVersaoFisioterapiaAPI.Controllers
             }
         }
 
-        [HttpDelete("{id:int}")]
-        public ActionResult Delete(int id)
+        [HttpDelete("RemoverCliente")]
+        public ActionResult Delete(string nome)
         {
-            var clienteFromDB = _context?.Clientes.FirstOrDefault(c => c.ClienteId == id);
+            var clienteFromDB = _context?.Clientes.FirstOrDefault(c => c.Nome == nome);
 
             if (clienteFromDB == null)
                 return NotFound("Cliente não encontrado");
