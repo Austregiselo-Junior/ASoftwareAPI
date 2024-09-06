@@ -1,5 +1,6 @@
 using ASoftwareVersaoFisioterapiaAPI.Context;
 using ASoftwareVersaoFisioterapiaAPI.Services.Authentication;
+using ASoftwareVersaoFisioterapiaAPI.Services.Payment;
 using ASoftwareVersaoFisioterapiaAPI.Services.TimeControl;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,6 +21,7 @@ option.UseMySql(mySqlConnection, ServerVersion.AutoDetect(mySqlConnection)));
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddTransient<ITimeControlService, TimeControlService>();
+builder.Services.AddTransient<IPaymentService, PaymentService>();
 
 var app = builder.Build();
 

@@ -23,10 +23,11 @@ namespace ASoftwareVersaoFisioterapiaAPI.Controllers
 
         #region Gets
 
-        [HttpGet]
-        public ActionResult<IEnumerable<Cliente>> Get()
+        [HttpGet("TabeladeHorarios")]
+        public ActionResult<IEnumerable<object>> Get()
         {
-            var cliente = _context.Clientes.AsNoTracking().ToList();
+            var cliente = _context.Clientes.AsNoTracking().Select(c => new { c.Nome, c.Telefone, c.DataDaConsulta }).ToList();
+
             return (cliente is null) ? NotFound("Cliente não encontrado.") : cliente;
         }
 

@@ -1,8 +1,10 @@
 ﻿using ASoftwareVersaoFisioterapiaAPI.Context;
 using ASoftwareVersaoFisioterapiaAPI.Model;
-using ASoftwareVersaoFisioterapiaAPI.Services.Authentication;
+using ASoftwareVersaoFisioterapiaAPI.Services.Payment;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace ASoftwareVersaoFisioterapiaAPI.Controllers
 {
@@ -11,19 +13,36 @@ namespace ASoftwareVersaoFisioterapiaAPI.Controllers
     public class CategoriaController : ControllerBase
     {
         private readonly ASoftwareVersaoFisioterapiaAPIContext _context;
+        private readonly IPaymentService _paymentService;
 
-
-        public CategoriaController(ASoftwareVersaoFisioterapiaAPIContext context, IAuthService authService)
+        public CategoriaController(ASoftwareVersaoFisioterapiaAPIContext context, IPaymentService paymentService)
         {
             _context = context;
-
+            _paymentService = paymentService;
         }
 
-        [HttpGet]
-        public ActionResult<IEnumerable<Categoria>> Get()
+        [HttpGet("TabelaControleFinanceiro")]
+        public ActionResult<IEnumerable<object>> Get()
         {
-            var categoria = _context.Categorias.AsNoTracking().ToList();
-            return (categoria is null) ? NotFound("Categoria não encontrada.") : categoria;
+            var CategoriaComClienteNome = _context.Categorias.AsNoTracking().Include(categoria => categoria.Clientes).Select(categoria => new
+            {
+                CategoriaNome = categoria.Nome,
+                categoria.ValorDaSessao,
+                categoria.QuantidadeDeSessao,
+                categoria.ValorTotal,
+                categoria.Desconto,
+                categoria.ValorPago,
+                categoria.Vencimento,
+                categoria.SituacaoFinanceira,
+                Clientes = categoria.Clientes.Select(cliente => new
+                {
+                    cliente.Nome
+                })
+            }).ToList();
+            var options = new JsonSerializerOptions { ReferenceHandler = ReferenceHandler.Preserve, WriteIndented = true };
+            var json = JsonSerializer.Serialize(CategoriaComClienteNome, options);
+
+            return Content(json);
         }
 
         [HttpGet("{id:int}", Name = "ObterCategoria")]
@@ -36,11 +55,10 @@ namespace ASoftwareVersaoFisioterapiaAPI.Controllers
         [HttpPost]
         public ActionResult Post(Categoria categoria)
         {
+            if (categoria == null)
+                return BadRequest();
             try
             {
-                if (categoria == null)
-                    return BadRequest();
-
                 _context.Categorias.Add(categoria);
                 _context.SaveChanges();
 

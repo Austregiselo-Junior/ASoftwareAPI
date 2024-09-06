@@ -44,5 +44,9 @@ namespace ASoftwareVersaoFisioterapiaAPI.Model
         public DateTime? UltimaAtualizacao { get; set; }
 
         public ICollection<Cliente>? Clientes { get; set; }
+
+        //OBS: Devo rever o modelo de dados, porque está dando muito trabalho lidar com os relacionamentos em tempo de requisição e no front.
+        //No front se uma categoria tem n clientes, como listar as categorias?
+        // se eu tiver apenas uma tabela com todos os dados dos clientes inclusive forma de pagamento e valor, vai ser mais fácil lidar com as requisições
     }
 }
