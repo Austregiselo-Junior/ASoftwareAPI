@@ -5,7 +5,7 @@ namespace ASoftwareVersaoFisioterapiaAPI.Services.Payment
     public class PaymentService : IPaymentService
     {
         private readonly ASoftwareVersaoFisioterapiaAPIContext _context;
-        private const string _session = "Session";
+        private const string _session = "Sessão";
         private const string _month = "Mensal";
 
         public PaymentService(ASoftwareVersaoFisioterapiaAPIContext context)
@@ -13,19 +13,28 @@ namespace ASoftwareVersaoFisioterapiaAPI.Services.Payment
             _context = context;
         }
 
-        public float PaymentBySession(float value, int numberOfSessions)
+        public float TotalValue(float value, int numberOfSessions)
         {
             return value * numberOfSessions;
         }
 
-        public float PaymentByMonth(float value, float discount, int numberOfSessions)
+        private static float TotalValueBySession(float value, float discount, int numberOfSessions)
         {
             return (value * discount) * numberOfSessions;
         }
 
-        public string IsCategoryBySerrionOrMonth(string type)
+        public bool IsCategoryBySerrion(string type)
         {
-            return type.Equals(_session) ? _session : _month;
+            return type.Equals(_session);
+        }
+
+        public float Payment(string type, float value, float discount, int numberOfSessions)
+        {
+            if (IsCategoryBySerrion(type))
+            {
+                return TotalValue(value, numberOfSessions);
+            }
+            return TotalValueBySession(value, discount, numberOfSessions);
         }
     }
 }

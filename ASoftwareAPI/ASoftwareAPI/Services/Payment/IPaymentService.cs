@@ -2,8 +2,8 @@
 {
     public interface IPaymentService
     {
-        float PaymentBySession(float value, int numberOfSessions);
-        float PaymentByMonth(float value, float discount, int numberOfSessions);
-        string IsCategoryBySerrionOrMonth(string type);
+        float TotalValue(float value, int numberOfSessions);
+
+        float Payment(string type, float value, float discount, int numberOfSessions);
     }
 }

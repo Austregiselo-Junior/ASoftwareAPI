@@ -9,7 +9,6 @@ namespace ASoftwareVersaoFisioterapiaAPI.Context
         { }
 
         public DbSet<Usuario> Usuarios { get; set; }
-        public DbSet<Categoria> Categorias { get; set; }
         public DbSet<Cliente> Clientes { get; set; }
     }
 }

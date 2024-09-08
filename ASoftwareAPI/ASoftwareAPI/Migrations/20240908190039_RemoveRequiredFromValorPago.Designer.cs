@@ -4,6 +4,7 @@ using ASoftwareVersaoFisioterapiaAPI.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ASoftwareVersaoFisioterapiaAPI.Migrations
 {
     [DbContext(typeof(ASoftwareVersaoFisioterapiaAPIContext))]
-    partial class ASoftwareVersaoFisioterapiaAPIContextModelSnapshot : ModelSnapshot
+    [Migration("20240908190039_RemoveRequiredFromValorPago")]
+    partial class RemoveRequiredFromValorPago
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -42,7 +45,8 @@ namespace ASoftwareVersaoFisioterapiaAPI.Migrations
                         .IsRequired()
                         .HasColumnType("datetime(6)");
 
-                    b.Property<float>("Desconto")
+                    b.Property<float?>("Desconto")
+                        .IsRequired()
                         .HasColumnType("float");
 
                     b.Property<string>("Nome")
@@ -75,6 +79,7 @@ namespace ASoftwareVersaoFisioterapiaAPI.Migrations
                         .HasColumnType("float");
 
                     b.Property<float?>("ValorTotal")
+                        .IsRequired()
                         .HasColumnType("float");
 
                     b.Property<string>("Vencimento")

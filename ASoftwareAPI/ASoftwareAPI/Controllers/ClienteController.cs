@@ -1,10 +1,9 @@
 ﻿using ASoftwareVersaoFisioterapiaAPI.Context;
 using ASoftwareVersaoFisioterapiaAPI.Model;
+using ASoftwareVersaoFisioterapiaAPI.Services.Payment;
 using ASoftwareVersaoFisioterapiaAPI.Services.TimeControl;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace ASoftwareVersaoFisioterapiaAPI.Controllers
 {
@@ -14,30 +13,30 @@ namespace ASoftwareVersaoFisioterapiaAPI.Controllers
     {
         private readonly ASoftwareVersaoFisioterapiaAPIContext _context;
         private readonly ITimeControlService _timeControlService;
+        private readonly IPaymentService _paymentControlService;
 
-        public ClienteController(ASoftwareVersaoFisioterapiaAPIContext context, ITimeControlService timeControlService)
+        public ClienteController(ASoftwareVersaoFisioterapiaAPIContext context, ITimeControlService timeControlService, IPaymentService paymentControlService)
         {
             _context = context;
             _timeControlService = timeControlService;
+            _paymentControlService = paymentControlService;
         }
 
         #region Gets
 
-        [HttpGet("TabeladeHorarios")]
-        public ActionResult<IEnumerable<object>> Get()
+        [HttpGet("TabelaSimples")]
+        public ActionResult<IEnumerable<object>> GetTime()
         {
             var cliente = _context.Clientes.AsNoTracking().Select(c => new { c.Nome, c.Telefone, c.DataDaConsulta }).ToList();
 
             return (cliente is null) ? NotFound("Cliente não encontrado.") : cliente;
         }
 
-        [HttpGet("Categorias")]
-        public ActionResult<IEnumerable<Cliente>> GetClientesAndCategorias()
+        [HttpGet("TabelaDetalhada")]
+        public ActionResult<IEnumerable<Cliente>> GetAll()
         {
-            var clientesECategorias = _context.Clientes.AsNoTracking().Include(clientes => clientes.Categoria).ToList();
-            var options = new JsonSerializerOptions { ReferenceHandler = ReferenceHandler.Preserve, WriteIndented = true };
-            var json = JsonSerializer.Serialize(clientesECategorias, options);
-            return Content(json);
+            var clientes = _context.Clientes.AsNoTracking().ToList();
+            return (clientes is null) ? NotFound("Usuario não encontrados.") : clientes;
         }
 
         [HttpGet("{id:int}", Name = "ObterCliente")]
@@ -59,6 +58,9 @@ namespace ASoftwareVersaoFisioterapiaAPI.Controllers
 
                 if (_timeControlService.ValidateTimeControl(cliente.DataDaConsulta))
                 {
+                    cliente.ValorTotal = _paymentControlService.TotalValue(cliente.ValorDaSessao, cliente.QuantidadeDeSessao);
+                    cliente.ValorPago = _paymentControlService.Payment(cliente.Categoria, cliente.ValorDaSessao, cliente.Desconto, cliente.QuantidadeDeSessao);
+
                     _context.Clientes.Add(cliente);
                     _context.SaveChanges();
                 }
@@ -90,6 +92,9 @@ namespace ASoftwareVersaoFisioterapiaAPI.Controllers
                 {
                     return BadRequest("Error message: Horário não disponível!");
                 }
+
+                cliente.ValorTotal = _paymentControlService.TotalValue(cliente.ValorDaSessao, cliente.QuantidadeDeSessao);
+                cliente.ValorPago = _paymentControlService.Payment(cliente.Categoria, cliente.ValorDaSessao, cliente.Desconto, cliente.QuantidadeDeSessao);
 
                 _context.Entry(hasclienteFromDB).State = EntityState.Detached;
                 _context.Entry(cliente).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
