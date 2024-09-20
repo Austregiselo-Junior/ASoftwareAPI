@@ -79,11 +79,11 @@ namespace ASoftwareVersaoFisioterapiaAPI.Controllers
         }
 
         [HttpPut("AtualizarCliente")]
-        public ActionResult Put(string nome, Cliente cliente)
+        public ActionResult Put(int id, Cliente cliente)
         {
             try
             {
-                var hasclienteFromDB = _context?.Clientes.FirstOrDefault(c => c.Nome == nome);
+                var hasclienteFromDB = _context?.Clientes.FirstOrDefault(c => c.ClienteId == id);
 
                 if (hasclienteFromDB == null)
                     return BadRequest("Cliente não encontrado");
