@@ -104,6 +104,32 @@ namespace ASoftwareVersaoFisioterapiaAPI.Controllers
                 if (hasclienteFromDB == null)
                     return BadRequest("Cliente não encontrado");
 
+                cliente.ValorTotal = _paymentControlService.TotalValue(cliente.ValorDaSessao, cliente.QuantidadeDeSessao);
+                cliente.ValorPago = _paymentControlService.Payment(cliente.Categoria, cliente.ValorDaSessao, cliente.Desconto, cliente.QuantidadeDeSessao);
+
+                cliente.UltimaAtualizacao = _timeControlService.Dateformat(DateTime.Now);
+
+                _context.Entry(hasclienteFromDB).State = EntityState.Detached;
+                _context.Entry(cliente).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                _context.SaveChangesAsync();
+                return Ok(cliente);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error message: {ex.Message}");
+            }
+        }
+
+        [HttpPut("AtualizarClienteDataConsulta")]
+        public ActionResult PutDataDaConsulta(int id, Cliente cliente)
+        {
+            try
+            {
+                var hasclienteFromDB = _context?.Clientes.FirstOrDefault(c => c.ClienteId == id);
+
+                if (hasclienteFromDB == null)
+                    return BadRequest("Cliente não encontrado");
+
                 if (_timeControlService.ValidateTimeControl(cliente.DataDaConsulta))
                 {
                     return BadRequest("Error message: Horário não disponível!");
