@@ -9,9 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Habilitar CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAllOrigins", policy =>
+    options.AddPolicy("AllowOrigin", policy =>
     {
-        policy.WithOrigins().AllowAnyMethod().AllowAnyHeader();
+        policy.WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod();
     });
 });
 
@@ -42,7 +42,7 @@ if (app.Environment.IsDevelopment())
 }
 
 // Usar o CORS
-app.UseCors("AllowAllOrigins");
+app.UseCors("AllowOrigin");
 
 app.UseHttpsRedirection();
 
