@@ -33,9 +33,23 @@ namespace ASoftwareVersaoFisioterapiaAPI.Controllers
         }
 
         [HttpGet("TabelaDetalhada")]
-        public ActionResult<IEnumerable<Cliente>> GetAll()
+        public ActionResult<IEnumerable<object>> GetAll()
         {
-            var clientes = _context.Clientes.AsNoTracking().ToList();
+            var clientes = _context.Clientes.AsNoTracking().Select(c => new
+            {
+                c.Nome,
+                c.Telefone,
+                c.DataDaConsulta,
+                c.Categoria,
+                c.ValorDaSessao,
+                c.QuantidadeDeSessao,
+                c.ValorTotal,
+                c.Desconto,
+                c.ValorPago,
+                c.Vencimento,
+                c.SituacaoFinanceira
+            }).ToList();
+
             return (clientes is null) ? NotFound("Usuario não encontrados.") : clientes;
         }
 
@@ -90,7 +104,7 @@ namespace ASoftwareVersaoFisioterapiaAPI.Controllers
                 if (hasclienteFromDB == null)
                     return BadRequest("Cliente não encontrado");
 
-                if (!_timeControlService.ValidateTimeControl(cliente.DataDaConsulta))
+                if (_timeControlService.ValidateTimeControl(cliente.DataDaConsulta))
                 {
                     return BadRequest("Error message: Horário não disponível!");
                 }
