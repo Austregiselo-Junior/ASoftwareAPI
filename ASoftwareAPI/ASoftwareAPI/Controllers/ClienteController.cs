@@ -54,9 +54,23 @@ namespace ASoftwareVersaoFisioterapiaAPI.Controllers
         }
 
         [HttpGet("{id:int}", Name = "ObterCliente")]
-        public ActionResult<Cliente> GetById(int id)
+        public ActionResult<object> GetById(int id)
         {
-            var cliente = _context.Clientes.AsNoTracking().FirstOrDefault(c => c.ClienteId == id);
+            var cliente = _context.Clientes.AsNoTracking().Where(c => c.ClienteId == id).Select(c => new
+            {
+                c.Nome,
+                c.Telefone,
+                c.DataDaConsulta,
+                c.Categoria,
+                c.ValorDaSessao,
+                c.QuantidadeDeSessao,
+                c.ValorTotal,
+                c.Desconto,
+                c.ValorPago,
+                c.Vencimento,
+                c.SituacaoFinanceira
+            }).FirstOrDefault();
+
             return (cliente is null) ? NotFound("Cliente não encontrado.") : cliente;
         }
 
