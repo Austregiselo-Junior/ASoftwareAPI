@@ -11,6 +11,11 @@ namespace ASoftwareVersaoFisioterapiaAPI.Services.TimeControl
             _context = context;
         }
 
+        public DateTime Dateformat(DateTime datetime)
+        {
+            return DateTime.Now;
+        }
+
         public bool ValidateTimeControl(DateTime dateTime)
         {
             var dateTimeDB = _context.Clientes.Any(cliente => cliente.DataDaConsulta == dateTime);

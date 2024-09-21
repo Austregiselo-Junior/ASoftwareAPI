@@ -61,6 +61,8 @@ namespace ASoftwareVersaoFisioterapiaAPI.Controllers
                     cliente.ValorTotal = _paymentControlService.TotalValue(cliente.ValorDaSessao, cliente.QuantidadeDeSessao);
                     cliente.ValorPago = _paymentControlService.Payment(cliente.Categoria, cliente.ValorDaSessao, cliente.Desconto, cliente.QuantidadeDeSessao);
 
+                    cliente.UltimaAtualizacao = _timeControlService.Dateformat(DateTime.Now);
+
                     _context.Clientes.Add(cliente);
                     _context.SaveChanges();
                 }
@@ -95,6 +97,8 @@ namespace ASoftwareVersaoFisioterapiaAPI.Controllers
 
                 cliente.ValorTotal = _paymentControlService.TotalValue(cliente.ValorDaSessao, cliente.QuantidadeDeSessao);
                 cliente.ValorPago = _paymentControlService.Payment(cliente.Categoria, cliente.ValorDaSessao, cliente.Desconto, cliente.QuantidadeDeSessao);
+
+                cliente.UltimaAtualizacao = _timeControlService.Dateformat(DateTime.Now);
 
                 _context.Entry(hasclienteFromDB).State = EntityState.Detached;
                 _context.Entry(cliente).State = Microsoft.EntityFrameworkCore.EntityState.Modified;

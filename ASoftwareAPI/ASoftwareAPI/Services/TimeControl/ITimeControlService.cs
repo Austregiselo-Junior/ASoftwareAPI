@@ -3,5 +3,7 @@
     public interface ITimeControlService
     {
         bool ValidateTimeControl(DateTime dateTime);
+
+        DateTime Dateformat(DateTime dateTime);
     }
 }
