@@ -25,7 +25,7 @@ namespace ASoftwareVersaoFisioterapiaAPI.Controllers
         public ActionResult<IEnumerable<Usuario>> Get()
         {
             var usuario = _context.Usuarios.AsNoTracking().ToList();
-            return (usuario is null) ? NotFound(new { message = "Usuario não encontrados." }) : usuario;
+            return (usuario is null) ? NotFound(new { message = "Usuario não encontrados." }) : Ok(usuario);
         }
 
         [HttpGet("Clientes")]
@@ -42,7 +42,7 @@ namespace ASoftwareVersaoFisioterapiaAPI.Controllers
         public ActionResult<Usuario> GetById(int id)
         {
             var usuario = _context.Usuarios.AsNoTracking().FirstOrDefault(usuario => usuario.UsuarioId == id);
-            return (usuario is null) ? NotFound(new { message = "Usuario não encontrados." }) : usuario;
+            return (usuario is null) ? NotFound(new { message = "Usuario não encontrados." }) : Ok(usuario);
         }
 
         [HttpPost]

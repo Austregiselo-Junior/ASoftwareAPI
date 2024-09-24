@@ -29,7 +29,7 @@ namespace ASoftwareVersaoFisioterapiaAPI.Controllers
         {
             var cliente = _context.Clientes.AsNoTracking().Select(c => new { c.Nome, c.Telefone, c.DataDaConsulta }).ToList();
 
-            return (cliente is null) ? NotFound(new { message = "Cliente não encontrado." }) : cliente;
+            return (cliente is null) ? NotFound(new { message = "Cliente não encontrado." }) : Ok(cliente);
         }
 
         [HttpGet("TabelaDetalhada")]
@@ -50,7 +50,7 @@ namespace ASoftwareVersaoFisioterapiaAPI.Controllers
                 c.SituacaoFinanceira
             }).ToList();
 
-            return (clientes is null) ? NotFound(new { message = "Usuario não encontrados." }) : clientes;
+            return (clientes is null) ? NotFound(new { message = "Usuario não encontrados." }) : Ok(clientes);
         }
 
         [HttpGet("{id:int}", Name = "ObterCliente")]
@@ -71,7 +71,7 @@ namespace ASoftwareVersaoFisioterapiaAPI.Controllers
                 c.SituacaoFinanceira
             }).FirstOrDefault();
 
-            return (cliente is null) ? NotFound(new { message = "Cliente não encontrado." }) : cliente;
+            return (cliente is null) ? NotFound(new { message = "Cliente não encontrado." }) : Ok(cliente);
         }
 
         #endregion Gets
@@ -99,7 +99,7 @@ namespace ASoftwareVersaoFisioterapiaAPI.Controllers
                     return BadRequest(new { message = "Error message: Horário não disponível!" });
                 }
 
-                return new CreatedAtRouteResult("ObterCliente", new { id = cliente.ClienteId }, cliente);
+                return new CreatedAtRouteResult("ObterCliente", new { id = cliente.ClienteId }, Ok(cliente));
             }
             catch (Exception ex)
             {
