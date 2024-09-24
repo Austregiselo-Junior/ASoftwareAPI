@@ -25,7 +25,7 @@ namespace ASoftwareVersaoFisioterapiaAPI.Controllers
         public ActionResult<IEnumerable<Usuario>> Get()
         {
             var usuario = _context.Usuarios.AsNoTracking().ToList();
-            return (usuario is null) ? NotFound("Usuario não encontrados.") : usuario;
+            return (usuario is null) ? NotFound(new { message = "Usuario não encontrados." }) : usuario;
         }
 
         [HttpGet("Clientes")]
@@ -42,7 +42,7 @@ namespace ASoftwareVersaoFisioterapiaAPI.Controllers
         public ActionResult<Usuario> GetById(int id)
         {
             var usuario = _context.Usuarios.AsNoTracking().FirstOrDefault(usuario => usuario.UsuarioId == id);
-            return (usuario is null) ? NotFound("Usuario não encontrados.") : usuario;
+            return (usuario is null) ? NotFound(new { message = "Usuario não encontrados." }) : usuario;
         }
 
         [HttpPost]
@@ -62,16 +62,16 @@ namespace ASoftwareVersaoFisioterapiaAPI.Controllers
         {
             if (string.IsNullOrEmpty(login) || string.IsNullOrEmpty(senha))
             {
-                return BadRequest("Os campos login e senha são obrigatórios.");
+                return BadRequest(new { message = "Os campos login e senha são obrigatórios." });
             }
 
             if ((bool)(_authService?.ValidateUserAsync(login, senha)))
             {
-                return Ok("Login realizado com sucesso.");
+                return Ok(new { message = "Login realizado com sucesso." });
             }
             else
             {
-                return Unauthorized("Credenciais inválidas.");
+                return Unauthorized(new { message = "Credenciais inválidas." });
             }
         }
 
@@ -79,12 +79,12 @@ namespace ASoftwareVersaoFisioterapiaAPI.Controllers
         public ActionResult Put(int id, Usuario usuario)
         {
             if (id != usuario?.UsuarioId)
-                return BadRequest("Id inválido");
+                return BadRequest(new { message = "Id inválido" });
 
             var usuarioFromDB = _context?.Usuarios.FirstOrDefault(u => u.UsuarioId == id);
 
             if (usuarioFromDB == null)
-                return BadRequest("Categoria não encontrada");
+                return BadRequest(new { message = "Categoria não encontrada" });
 
             _context.Entry(usuario).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             _context.SaveChanges();
@@ -97,7 +97,7 @@ namespace ASoftwareVersaoFisioterapiaAPI.Controllers
             var usuarioFromDB = _context?.Usuarios.FirstOrDefault(u => u.UsuarioId == id);
 
             if (usuarioFromDB == null)
-                return NotFound("Usuario não encontrado");
+                return NotFound(new { message = "Usuario não encontrado" });
 
             _context.Usuarios.Remove(usuarioFromDB);
             _context.SaveChanges();

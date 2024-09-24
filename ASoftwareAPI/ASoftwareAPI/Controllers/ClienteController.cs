@@ -29,7 +29,7 @@ namespace ASoftwareVersaoFisioterapiaAPI.Controllers
         {
             var cliente = _context.Clientes.AsNoTracking().Select(c => new { c.Nome, c.Telefone, c.DataDaConsulta }).ToList();
 
-            return (cliente is null) ? NotFound("Cliente não encontrado.") : cliente;
+            return (cliente is null) ? NotFound(new { message = "Cliente não encontrado." }) : cliente;
         }
 
         [HttpGet("TabelaDetalhada")]
@@ -50,7 +50,7 @@ namespace ASoftwareVersaoFisioterapiaAPI.Controllers
                 c.SituacaoFinanceira
             }).ToList();
 
-            return (clientes is null) ? NotFound("Usuario não encontrados.") : clientes;
+            return (clientes is null) ? NotFound(new { message = "Usuario não encontrados." }) : clientes;
         }
 
         [HttpGet("{id:int}", Name = "ObterCliente")]
@@ -71,7 +71,7 @@ namespace ASoftwareVersaoFisioterapiaAPI.Controllers
                 c.SituacaoFinanceira
             }).FirstOrDefault();
 
-            return (cliente is null) ? NotFound("Cliente não encontrado.") : cliente;
+            return (cliente is null) ? NotFound(new { message = "Cliente não encontrado." }) : cliente;
         }
 
         #endregion Gets
@@ -96,15 +96,18 @@ namespace ASoftwareVersaoFisioterapiaAPI.Controllers
                 }
                 else
                 {
-                    return BadRequest("Error message: Horário não disponível!");
+                    return BadRequest(new { message = "Error message: Horário não disponível!" });
                 }
 
                 return new CreatedAtRouteResult("ObterCliente", new { id = cliente.ClienteId }, cliente);
             }
             catch (Exception ex)
             {
-                return BadRequest($"Error message: {ex.Message}," +
-                    $" Inner exeption: {ex.InnerException}");
+                return BadRequest(new
+                {
+                    message = $"Error message: {ex.Message}," +
+                    $" Inner exeption: {ex.InnerException}"
+                });
             }
         }
 
@@ -116,7 +119,7 @@ namespace ASoftwareVersaoFisioterapiaAPI.Controllers
                 var hasclienteFromDB = _context?.Clientes.FirstOrDefault(c => c.ClienteId == id);
 
                 if (hasclienteFromDB == null)
-                    return BadRequest("Cliente não encontrado");
+                    return BadRequest(new { message = "Cliente não encontrado" });
 
                 cliente.ValorTotal = _paymentControlService.TotalValue(cliente.ValorDaSessao, cliente.QuantidadeDeSessao);
                 cliente.ValorPago = _paymentControlService.Payment(cliente.Categoria, cliente.ValorDaSessao, cliente.Desconto, cliente.QuantidadeDeSessao);
@@ -130,7 +133,7 @@ namespace ASoftwareVersaoFisioterapiaAPI.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest($"Error message: {ex.Message}");
+                return BadRequest(new { message = $"Error message: {ex.Message}" });
             }
         }
 
@@ -142,11 +145,11 @@ namespace ASoftwareVersaoFisioterapiaAPI.Controllers
                 var hasclienteFromDB = _context?.Clientes.FirstOrDefault(c => c.ClienteId == id);
 
                 if (hasclienteFromDB == null)
-                    return BadRequest("Cliente não encontrado");
+                    return BadRequest(new { message = "Cliente não encontrado" });
 
                 if (_timeControlService.ValidateTimeControl(cliente.DataDaConsulta))
                 {
-                    return BadRequest("Error message: Horário não disponível!");
+                    return BadRequest(new { message = "Error message: Horário não disponível!" });
                 }
 
                 cliente.ValorTotal = _paymentControlService.TotalValue(cliente.ValorDaSessao, cliente.QuantidadeDeSessao);
@@ -161,7 +164,7 @@ namespace ASoftwareVersaoFisioterapiaAPI.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest($"Error message: {ex.Message}");
+                return BadRequest(new { message = $"Error message: {ex.Message}" });
             }
         }
 
@@ -171,7 +174,7 @@ namespace ASoftwareVersaoFisioterapiaAPI.Controllers
             var clienteFromDB = _context?.Clientes.FirstOrDefault(c => c.Nome == nome);
 
             if (clienteFromDB == null)
-                return NotFound("Cliente não encontrado");
+                return NotFound(new { message = "Cliente não encontrado" });
 
             _context?.Clientes.Remove(clienteFromDB);
             _context?.SaveChanges();
