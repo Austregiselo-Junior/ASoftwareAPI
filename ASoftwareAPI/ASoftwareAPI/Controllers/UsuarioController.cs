@@ -60,6 +60,11 @@ namespace ASoftwareVersaoFisioterapiaAPI.Controllers
         [HttpPost("login")]
         public IActionResult Login(string login, string senha)
         {
+            if (string.IsNullOrEmpty(login) || string.IsNullOrEmpty(senha))
+            {
+                return BadRequest("Os campos login e senha são obrigatórios.");
+            }
+
             if ((bool)(_authService?.ValidateUserAsync(login, senha)))
             {
                 return Ok("Login realizado com sucesso.");
