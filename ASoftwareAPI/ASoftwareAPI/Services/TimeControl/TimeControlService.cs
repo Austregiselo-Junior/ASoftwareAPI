@@ -1,4 +1,5 @@
 ﻿using ASoftwareVersaoFisioterapiaAPI.Context;
+using ASoftwareVersaoFisioterapiaAPI.Model;
 
 namespace ASoftwareVersaoFisioterapiaAPI.Services.TimeControl
 {
@@ -18,7 +19,7 @@ namespace ASoftwareVersaoFisioterapiaAPI.Services.TimeControl
 
         public bool ValidateTimeControl(DateTime dateTime)
         {
-            return _context.Clientes.Any(cliente => cliente.DataDaConsulta == dateTime);
+            return !_context.Clientes.Any((Cliente cliente) => cliente.DataDaConsulta == dateTime);
         }
     }
 }
