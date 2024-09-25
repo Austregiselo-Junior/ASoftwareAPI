@@ -171,7 +171,7 @@ namespace ASoftwareVersaoFisioterapiaAPI.Controllers
         [HttpDelete("RemoverCliente")]
         public ActionResult Delete(string nome)
         {
-            var clienteFromDB = _context?.Clientes.FirstOrDefault(c => c.Nome == nome);
+            var clienteFromDB = _context?.Clientes.FirstOrDefault((Cliente c) => c.Nome == nome);
 
             if (clienteFromDB == null)
                 return NotFound(new { message = "Cliente não encontrado" });
