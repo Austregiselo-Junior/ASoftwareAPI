@@ -13,12 +13,20 @@ namespace ASoftwareVersaoFisioterapiaAPI.Services.Authentication
 
         public bool ValidateUserAsync(string login, string senha)
         {
-            var user = _context.Usuarios.FirstOrDefault(u => u.Login == login);
+            try
+            {
+                var user = _context.Usuarios.FirstOrDefault(u => u.Login == login);
 
-            if (user == null)
-                return false;
+                if (user == null)
+                    return false;
 
-            return user.Senha.ToLower().Equals(senha);
+                return user.Senha.Equals(senha);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                throw;
+            }
         }
     }
 }

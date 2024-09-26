@@ -12,14 +12,22 @@ namespace ASoftwareVersaoFisioterapiaAPI.Services.TimeControl
             _context = context;
         }
 
-        public DateTime Dateformat(DateTime datetime)
+        public DateTime Dateformat()
         {
             return DateTime.Now;
         }
 
         public bool ValidateTimeControl(DateTime dateTime)
         {
-            return !_context.Clientes.Any((Cliente cliente) => cliente.DataDaConsulta == dateTime);
+            try
+            {
+                return !_context.Clientes.Any((Cliente cliente) => cliente.DataDaConsulta == dateTime);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                throw;
+            }
         }
     }
 }

@@ -6,7 +6,6 @@ namespace ASoftwareVersaoFisioterapiaAPI.Services.Payment
     {
         private readonly ASoftwareVersaoFisioterapiaAPIContext _context;
         private const string _session = "Sessão";
-        private const string _month = "Mensal";
 
         public PaymentService(ASoftwareVersaoFisioterapiaAPIContext context)
         {

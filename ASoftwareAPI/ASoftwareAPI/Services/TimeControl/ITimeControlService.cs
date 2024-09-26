@@ -4,6 +4,6 @@
     {
         bool ValidateTimeControl(DateTime dateTime);
 
-        DateTime Dateformat(DateTime dateTime);
+        DateTime Dateformat();
     }
 }

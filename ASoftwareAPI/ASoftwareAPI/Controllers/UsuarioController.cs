@@ -65,7 +65,7 @@ namespace ASoftwareVersaoFisioterapiaAPI.Controllers
                 return BadRequest(new { message = "Os campos login e senha são obrigatórios." });
             }
 
-            if ((bool)(_authService?.ValidateUserAsync(login, senha)))
+            if (_authService.ValidateUserAsync(login, senha))
             {
                 return Ok(new { message = "Login realizado com sucesso." });
             }
