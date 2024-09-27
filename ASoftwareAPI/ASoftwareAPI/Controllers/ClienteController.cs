@@ -37,6 +37,7 @@ namespace ASoftwareVersaoFisioterapiaAPI.Controllers
         {
             var clientes = _context.Clientes.AsNoTracking().Select(c => new
             {
+                c.ClienteId,
                 c.Nome,
                 c.Telefone,
                 c.DataDaConsulta,
@@ -169,9 +170,9 @@ namespace ASoftwareVersaoFisioterapiaAPI.Controllers
         }
 
         [HttpDelete("RemoverCliente")]
-        public ActionResult Delete(string nome)
+        public ActionResult Delete(int id)
         {
-            var clienteFromDB = _context?.Clientes.FirstOrDefault((Cliente c) => c.Nome == nome);
+            var clienteFromDB = _context?.Clientes.FirstOrDefault((Cliente c) => c.ClienteId == id);
 
             if (clienteFromDB == null)
                 return NotFound(new { message = "Cliente não encontrado" });
