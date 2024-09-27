@@ -19,7 +19,7 @@ namespace ASoftwareVersaoFisioterapiaAPI.Services.Payment
 
         private static float TotalValueBySession(float value, float discount, int numberOfSessions)
         {
-            return (value * discount) * numberOfSessions;
+            return (value * discount / 100) * numberOfSessions;
         }
 
         public bool IsCategoryBySerrion(string type)
