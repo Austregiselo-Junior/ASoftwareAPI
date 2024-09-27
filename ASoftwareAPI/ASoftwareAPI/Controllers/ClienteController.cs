@@ -48,7 +48,8 @@ namespace ASoftwareVersaoFisioterapiaAPI.Controllers
                 c.Desconto,
                 c.ValorPago,
                 c.Vencimento,
-                c.SituacaoFinanceira
+                c.SituacaoFinanceira,
+                c.DataDoCadastro
             }).ToList();
 
             return (clientes is null) ? NotFound(new { message = "Usuario não encontrados." }) : Ok(clientes);
