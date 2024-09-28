@@ -35,24 +35,31 @@ namespace ASoftwareVersaoFisioterapiaAPI.Controllers
         [HttpGet("TabelaDetalhada")]
         public ActionResult<IEnumerable<object>> GetAll()
         {
-            var clientes = _context.Clientes.AsNoTracking().Select(c => new
+            try
             {
-                c.ClienteId,
-                c.Nome,
-                c.Telefone,
-                c.DataDaConsulta,
-                c.Categoria,
-                c.ValorDaSessao,
-                c.QuantidadeDeSessao,
-                c.ValorTotal,
-                c.Desconto,
-                c.ValorPago,
-                c.Vencimento,
-                c.SituacaoFinanceira,
-                c.DataDoCadastro
-            }).ToList();
+                var clientes = _context.Clientes.AsNoTracking().Select(c => new
+                {
+                    c.ClienteId,
+                    c.Nome,
+                    c.Telefone,
+                    c.DataDaConsulta,
+                    c.Categoria,
+                    c.ValorDaSessao,
+                    c.QuantidadeDeSessao,
+                    c.ValorTotal,
+                    c.Desconto,
+                    c.ValorPago,
+                    c.Vencimento,
+                    c.SituacaoFinanceira,
+                    c.DataDoCadastro
+                }).ToList();
 
-            return (clientes is null) ? NotFound(new { message = "Usuario não encontrados." }) : Ok(clientes);
+                return (clientes is null) ? StatusCode(500) : Ok(clientes);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         [HttpGet("{id:int}", Name = "ObterCliente")]

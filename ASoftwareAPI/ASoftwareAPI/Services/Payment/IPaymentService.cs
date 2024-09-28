@@ -4,6 +4,6 @@
     {
         float TotalValue(float value, int numberOfSessions);
 
-        float Payment(string type, float value, float discount, int numberOfSessions);
+        float Payment(string type, float value, float discountPercentage, int numberOfSessions);
     }
 }

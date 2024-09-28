@@ -17,9 +17,13 @@ namespace ASoftwareVersaoFisioterapiaAPI.Services.Payment
             return value * numberOfSessions;
         }
 
-        private static float TotalValueBySession(float value, float discount, int numberOfSessions)
+        private float TotalValueBySession(float value, float discountPercentage, int numberOfSessions)
         {
-            return (value * discount / 100) * numberOfSessions;
+            if (value < 0 || numberOfSessions < 0 || discountPercentage < 0 || value == 0 || numberOfSessions == 0 || discountPercentage == 0)
+            {
+                return 0;
+            }
+            return TotalValue(value, numberOfSessions) - (value * numberOfSessions) * (discountPercentage / 100);
         }
 
         public bool IsCategoryBySerrion(string type)
@@ -27,13 +31,13 @@ namespace ASoftwareVersaoFisioterapiaAPI.Services.Payment
             return type.Equals(_session);
         }
 
-        public float Payment(string type, float value, float discount, int numberOfSessions)
+        public float Payment(string type, float value, float discountPercentage, int numberOfSessions)
         {
-            if (IsCategoryBySerrion(type))
+            if (IsCategoryBySerrion(type) || discountPercentage == 0)
             {
                 return TotalValue(value, numberOfSessions);
             }
-            return TotalValueBySession(value, discount, numberOfSessions);
+            return TotalValueBySession(value, discountPercentage, numberOfSessions);
         }
     }
 }
