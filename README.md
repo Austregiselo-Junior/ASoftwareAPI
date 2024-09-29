@@ -4,7 +4,7 @@ Este repositório é voltado para o back end do projeto ninal da Pós em Desenvo
 O projeto é uma API em C# com Net 8.
 
 Configuração da conexão com o banco de dados:
-- Importe as tabelas do banco de dados que estão na branch DadaBase;
+- Importe as tabelas do banco de dados que estão na pasta DadaBase;
 - Configure a string de conexão no DefaultConnection no arquivo appsettings.js;
   
 Build:
